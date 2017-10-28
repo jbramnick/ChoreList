@@ -6,7 +6,7 @@ from flask_bootstrap import Bootstrap
 #import data_postgres as pg
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'Som3thing';
+#app.config['SECRET_KEY'] = 'Som3thing';
 
 @app.route('/')
 def home():
