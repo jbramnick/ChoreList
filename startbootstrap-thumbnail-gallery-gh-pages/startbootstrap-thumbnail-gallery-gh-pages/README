@@ -3,3 +3,21 @@ sudo apt-get install postgresql-contrib-9.3
 sudo apt-get install postgresql-contrib libpq-dev
 pip install psycopg2
 pip install python-bootstrap
+
+// start postgres server
+sudo service postgresql start
+
+// login to postgres without password
+sudo sudo -u postgres psql 
+
+// login normally with password
+psql -U postgres -h localhost
+
+// enter postgres database 
+\c databasename
+
+// describe a table
+\d tablename
+
+// load the .sql file
+\i filename.sql
