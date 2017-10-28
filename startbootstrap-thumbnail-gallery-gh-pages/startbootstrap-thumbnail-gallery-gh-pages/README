@@ -1,0 +1,5 @@
+sudo apt-get install postgresql
+sudo apt-get install postgresql-contrib-9.3
+sudo apt-get install postgresql-contrib libpq-dev
+pip install psycopg2
+pip install python-bootstrap

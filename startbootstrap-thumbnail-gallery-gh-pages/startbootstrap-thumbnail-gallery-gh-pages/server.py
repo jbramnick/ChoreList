@@ -3,6 +3,7 @@ import psycopg2
 import psycopg2.extras
 from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
+from config import *
 #import data_postgres as pg
 
 app = Flask(__name__)
