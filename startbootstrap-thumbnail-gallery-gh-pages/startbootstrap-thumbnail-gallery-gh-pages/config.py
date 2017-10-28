@@ -1,0 +1,4 @@
+POSTGRES_USER = "player"
+POSTGRES_PASSWORD="StarGuardian1"
+POSTGRES_DATABASE="bravery"
+POSTGRES_HOST="localhost"
