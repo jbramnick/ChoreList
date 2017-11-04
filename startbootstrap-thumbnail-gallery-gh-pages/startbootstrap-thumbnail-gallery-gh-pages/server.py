@@ -7,10 +7,12 @@ from config import *
 #import data_postgres as pg
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24).encode('hex')
 
 @app.route('/')
 def home():
     return render_template('login.html')
+    
 @app.route('/index',methods=['POST'])
 def index():
 	thing=[1,2,3,4,5,6,7]
