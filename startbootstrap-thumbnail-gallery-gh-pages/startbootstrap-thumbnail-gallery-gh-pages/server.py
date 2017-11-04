@@ -18,21 +18,25 @@ def about():
     
 @app.route('/index',methods=['POST'])
 def index():
-	if request.form['submit']=='login':
-		print("login")
-	try:
-		results = pg.get_user(request.form['Username'], request.form['Password'])
-		if results:
-			session['Username'] = request.form['Username']
-			session['Password'] = request.form['Password']
-			#session['id'] = results[0][2]
-			thing=[1,2,3,4,5,6,7]
-			user=request.form['Username']
-			passwd=request.form['Password']
-			#put database queries here
-			return render_template('index.html',things=thing,username=user)
-	except:
-		pass
-	return render_template('/login.html', failed = True)
+	if request.form['submit']=='Login':
+		try:
+			results = pg.get_user(request.form['Username'], request.form['Password'])
+			if results:
+				session['Username'] = request.form['Username']
+				session['Password'] = request.form['Password']
+				#session['id'] = results[0][2]
+				thing=[1,2,3,4,5,6,7]
+				user=request.form['Username']
+				passwd=request.form['Password']
+				#put database queries here
+				return render_template('index.html',things=thing,username=user)
+		except:
+			pass
+		return render_template('/login.html', failed = True)
+	elif request.form['submit']=='Register':
+		render_template('/login.html',disabled="disabled")
+		print("hello")
+		return render_template('index.html') 
+		
 if __name__ == '__main__':
     app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)), debug = True)
