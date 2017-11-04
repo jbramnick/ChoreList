@@ -1,7 +1,7 @@
 import os
 import psycopg2
 import psycopg2.extras
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 from flask_bootstrap import Bootstrap
 from config import *
 #import data_postgres as pg
@@ -15,6 +15,10 @@ def home():
     
 @app.route('/index',methods=['POST'])
 def index():
+	session['uuid'] = uuid.uuid1()
+	session['username'] = 'New user'
+	print('connected')
+	users[session['uuid']] = {'username':'New user'}
 	thing=[1,2,3,4,5,6,7]
 	user=request.form['Username']
 	passwd=request.form['Password']

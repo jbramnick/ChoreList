@@ -49,7 +49,7 @@ CREATE TABLE groups (
     admin_id INT NOT NULL);
     
     /*test data for databases*/
-INSERT INTO usernames (username ) VALUES ('Brendon');
+INSERT INTO usernames (username) VALUES ('Brendon');
 INSERT INTO pass (id,password) VALUES (1,'abc1');
 INSERT INTO usernames (username ) VALUES ('Jesse');
 INSERT INTO pass (id,password) VALUES (2,'abc2');
