@@ -47,3 +47,14 @@ CREATE TABLE groups (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     admin_id INT NOT NULL);
+    
+    /*test data for databases*/
+INSERT INTO usernames (username ) VALUES ('Brendon');
+INSERT INTO pass (id,password) VALUES (1,'abc1');
+INSERT INTO usernames (username ) VALUES ('Jesse');
+INSERT INTO pass (id,password) VALUES (2,'abc2');
+INSERT INTO chore (name,description,rewardval, claimed,user_id,group_id) VALUES ('chore1','the first chore',5,false,1,1);
+INSERT INTO groups (name,admin_id) VALUES ('group1',1);
+INSERT INTO users (id,name,points,group_id) VALUES (1,'bob',0,1);
+INSERT INTO reward (id,name,description,cost,stock,group_id) VALUES (1,'MONEY','Cash',5,1,1);
+
