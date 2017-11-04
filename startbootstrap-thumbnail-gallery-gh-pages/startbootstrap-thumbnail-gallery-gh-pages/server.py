@@ -30,7 +30,7 @@ def index():
 	except:
 		pass
 	
-	return render_template('/', failed = True)
+	return render_template('login.html', failed = True)
 
 
 if __name__ == '__main__':
