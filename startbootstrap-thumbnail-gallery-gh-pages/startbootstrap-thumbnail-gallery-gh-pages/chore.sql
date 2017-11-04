@@ -58,3 +58,11 @@ INSERT INTO groups (name,admin_id) VALUES ('group1',1);
 INSERT INTO users (id,name,points,group_id) VALUES (1,'bob',0,1);
 INSERT INTO reward (id,name,description,cost,stock,group_id) VALUES (1,'MONEY','Cash',5,1,1);
 
+INSERT INTO usernames (username ) VALUES ('Alice');
+INSERT INTO pass (id,password) VALUES (3,'abc3');
+INSERT INTO usernames (username ) VALUES ('Joe');
+INSERT INTO pass (id,password) VALUES (4,'abc4');
+INSERT INTO chore (name,description,rewardval, claimed,user_id,group_id) VALUES ('Sweep','Sweep the living room clean',10,false,2,2);
+INSERT INTO groups (name,admin_id) VALUES ('group2',2);
+INSERT INTO users (id,name,points,group_id) VALUES (2,'Noami',13,2);
+INSERT INTO reward (id,name,description,cost,stock,group_id) VALUES (2,'Cholate','A candy-bar of your choosing',5,10,2);
