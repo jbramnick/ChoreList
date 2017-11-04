@@ -18,11 +18,12 @@ def about():
     
 @app.route('/index',methods=['POST'])
 def index():
+	if request.form['submit']=='login':
+		print("login")
 	try:
 		results = pg.get_user(request.form['Username'], request.form['Password'])
 		print(results)
 		if results:
-			print(request.data)
 			session['Username'] = request.form['Username']
 			session['Password'] = request.form['Password']
 			#session['id'] = results[0][2]
@@ -33,7 +34,6 @@ def index():
 			return render_template('index.html',things=thing,username=user)
 	except:
 		pass
-	
-	return render_template('/', failed = True)
+	return render_template('/login.html', failed = True)
 if __name__ == '__main__':
     app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)), debug = True)
