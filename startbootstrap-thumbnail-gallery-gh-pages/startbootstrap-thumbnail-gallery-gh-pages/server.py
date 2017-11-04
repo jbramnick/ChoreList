@@ -21,6 +21,7 @@ def index():
 	try:
 		results = pg.get_user(request.form['Username'], request.form['Password'])
 		if results:
+			print(request.data)
 			session['Username'] = request.form['Username']
 			session['Password'] = request.form['Password']
 			#session['id'] = results[0][2]
