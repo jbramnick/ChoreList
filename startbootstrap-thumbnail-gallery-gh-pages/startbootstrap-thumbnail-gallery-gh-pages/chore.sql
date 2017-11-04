@@ -69,3 +69,12 @@ INSERT INTO chore (name,description,rewardval, claimed,user_id,group_id) VALUES 
 INSERT INTO groups (name,admin_id) VALUES ('group2',2);
 INSERT INTO users (id,name,points,group_id) VALUES (2,'Noami',13,2);
 INSERT INTO reward (id,name,description,cost,stock,group_id) VALUES (2,'Cholate','A candy-bar of your choosing',5,10,2);
+
+
+CREATE ROLE choreadmin WITH LOGIN;
+\password choreadmin
+Ag7Lb4$fS
+Ag7Lb4$fS
+
+GRANT SELECT,INSERT,DELETE ON usernames, pass, chore, reward, admin, users, groups TO choreadmin;
+GRANT USAGE ON usernames_id_seq, chore_id_seq, reward_id_seq, groups_id_seq TO choreadmin;  

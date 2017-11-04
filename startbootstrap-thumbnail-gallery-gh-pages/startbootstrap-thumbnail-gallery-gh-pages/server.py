@@ -4,7 +4,7 @@ import psycopg2.extras
 from flask import Flask, render_template, request, session
 from flask_bootstrap import Bootstrap
 from config import *
-#import data_postgres as pg
+import data_postgres as pg
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24).encode('hex')
@@ -20,7 +20,6 @@ def about():
 def index():
 	try:
 		results = pg.get_user(request.form['Username'], request.form['Password'])
-		print(results)
 		if results:
 			session['Username'] = request.form['Username']
 			session['Password'] = request.form['Password']
