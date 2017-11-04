@@ -7,7 +7,7 @@ def connectToDB():
     try:
         return psycopg2.connect(connectionString)
     except:
-        #print("Can't connect to database")
+        print("Can't connect to database")
         return None
         
 def execute_query(query, conn, select=True, args=None):
@@ -32,7 +32,7 @@ def get_user(username, password):
 	conn=connectToDB()
 	if conn == None:
 		return None
-	query_string = "SELECT p.id FROM pass p JOIN usernames u ON (SELECT id FROM usernames WHERE username = %s) = p.id WHERE p.password = crypt(%s,password)"
+	query_string = "SELECT p.id FROM pass p JOIN usernames u ON u.id = p.id WHERE u.username = %s AND p.password = crypt(%s,password)"
 	results = execute_query(query_string, conn, args=(username, password))
 	print(results)
 	conn.close()

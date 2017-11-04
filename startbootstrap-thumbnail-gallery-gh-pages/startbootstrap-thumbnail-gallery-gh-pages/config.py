@@ -1,4 +1,4 @@
-POSTGRES_USER = "player"
-POSTGRES_PASSWORD="StarGuardian1"
-POSTGRES_DATABASE="bravery"
+POSTGRES_USER = "choreadmin"
+POSTGRES_PASSWORD="Ag7Lb4$fS"
+POSTGRES_DATABASE="choretracker"
 POSTGRES_HOST="localhost"
