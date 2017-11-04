@@ -12,13 +12,13 @@ app.secret_key = os.urandom(24).encode('hex')
 @app.route('/')
 def home():
     return render_template('login.html')
+@app.route('/about')
+def about():
+	return render_template('about.html')
     
 @app.route('/index',methods=['POST'])
 def index():
-	session['uuid'] = uuid.uuid1()
-	session['username'] = 'New user'
 	print('connected')
-	users[session['uuid']] = {'username':'New user'}
 	thing=[1,2,3,4,5,6,7]
 	user=request.form['Username']
 	passwd=request.form['Password']
