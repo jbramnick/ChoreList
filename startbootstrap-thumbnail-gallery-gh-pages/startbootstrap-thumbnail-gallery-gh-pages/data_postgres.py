@@ -38,42 +38,19 @@ def get_user(username, password):
 	conn.close()
 	return results
     
-def get_items():
-    conn = connectToDB()
-    if conn == None:
-        return None
-    query_string = "SELECT name FROM items"
-    results = execute_query(query_string, conn)
-    #print(results)
-    conn.close()
-    return results
-    
-def get_summoners():
-    conn = connectToDB()
-    if conn == None:
-        return None
-    query_string = "SELECT name FROM summoners"
-    results = execute_query(query_string, conn)
-    #print(results)
-    conn.close()
-    return results
-    
-def get_keystones():
-    conn = connectToDB()
-    if conn == None:
-        return None
-    query_string = "SELECT name FROM keystone"
-    results = execute_query(query_string, conn)
-    #print(results)
-    conn.close()
-    return results
-    
-def get_boots():
-    conn = connectToDB()
-    if conn == None:
-        return None
-    query_string = "SELECT name FROM boots"
-    results = execute_query(query_string, conn)
-    #print(results)
-    conn.close()
-    return results
+def new_player(username, password, name):
+	conn = connectToDB()
+	if conn == None:
+		return None
+	query_string = "SELECT id FROM usernames WHERE username = %s"
+	testresults = execute_query(query_string, conn, args=(username,))
+	if not testresults:
+	    query_string1 = "INSERT INTO usernames (username, name) VALUES (%s, %s)"
+	    execute_query(query_string1, conn, select=False,  args=(username,name))
+	
+	    query_string2 = "INSERT INTO pass (id, password) VALUES ((SELECT id FROM usernames WHERE username = %s), crypt(%s, gen_salt('bf')))"
+	    execute_query(query_string2, conn, select=False,  args=(username, password))
+	    conn.close()
+	    return 1
+	conn.close()
+	return 0
