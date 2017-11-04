@@ -12,6 +12,9 @@ app.secret_key = os.urandom(24).encode('hex')
 @app.route('/')
 def home():
     return render_template('login.html')
+@app.route('/about')
+def about():
+	return render_template('about.html')
     
 @app.route('/index',methods=['POST'])
 def index():
@@ -31,7 +34,5 @@ def index():
 		pass
 	
 	return render_template('login.html', failed = True)
-
-
 if __name__ == '__main__':
     app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)), debug = True)
