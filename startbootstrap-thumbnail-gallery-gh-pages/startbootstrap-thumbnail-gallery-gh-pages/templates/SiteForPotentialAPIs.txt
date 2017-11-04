@@ -1,0 +1,3 @@
+https://developers.google.com/google-apps/calendar/create-events
+https://developers.google.com/google-apps/calendar/quickstart/python
+https://developers.google.com/google-apps/calendar/v3/reference/events
