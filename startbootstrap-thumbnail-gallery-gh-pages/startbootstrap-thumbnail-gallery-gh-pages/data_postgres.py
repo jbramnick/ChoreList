@@ -28,15 +28,15 @@ def execute_query(query, conn, select=True, args=None):
 	return results
 
 
-def get_champion():
-    conn = connectToDB()
-    if conn == None:
-        return None
-    query_string = "SELECT name FROM champions"
-    results = execute_query(query_string, conn)
-    #print(results)
-    conn.close()
-    return results
+def get_user(username, password):
+	conn=connectToDB()
+	if conn == None:
+		return None
+	query_string = "SELECT p.id FROM pass p JOIN usernames u ON (SELECT id FROM usernames WHERE username = %s) = p.id WHERE p.password = crypt(%s,password)"
+	results = execute_query(query_string, conn, args=(username, password))
+	print(results)
+	conn.close()
+	return results
     
 def get_items():
     conn = connectToDB()
