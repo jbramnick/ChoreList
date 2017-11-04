@@ -49,8 +49,12 @@ CREATE TABLE groups (
     admin_id INT NOT NULL);
     
     /*test data for databases*/
+<<<<<<< HEAD
 INSERT INTO usernames (username ) VALUES ('Brendon');
 INSERT INTO admin (id,name,group_id) VALUES (1,'Brendon',1); 
+=======
+INSERT INTO usernames (username) VALUES ('Brendon');
+>>>>>>> 1111ee2db517ff7c6b7c3242e4f2d7c32b7b3fea
 INSERT INTO pass (id,password) VALUES (1,'abc1');
 INSERT INTO usernames (username ) VALUES ('Jesse');
 INSERT INTO admin (id,name,group_id) VALUES (2,'Jesse',1);
