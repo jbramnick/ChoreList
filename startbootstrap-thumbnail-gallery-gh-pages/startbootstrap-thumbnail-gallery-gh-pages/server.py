@@ -25,6 +25,7 @@ def authorization():
 			return redirect("/?failed=True")
 	elif request.form['submit']=='Register':
 		return redirect("/register")
+#call this method before every location except home and register
 def auth():
 	try:
 		if not session['Username']:
@@ -58,6 +59,11 @@ def index():
 		return redirect("/")
 	thing=[1,2,3,4,5,6,7]
 	#should prolly put database stuff here
-	return render_template('index.html',username=session['Username'],chorePage="active",things=thing)
+	return render_template('index.html',username=session['Username'],choresPage="active",things=thing)
+@app.route('/profile')
+def profile():
+	if not auth():
+		return redirect("/")
+	return render_template('profile.html',username=session['Username'],profilePage="active")
 if __name__ == '__main__':
     app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)), debug = True)
