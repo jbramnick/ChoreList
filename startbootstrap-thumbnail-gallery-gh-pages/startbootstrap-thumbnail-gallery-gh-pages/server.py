@@ -8,24 +8,6 @@ import data_postgres as pg
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24).encode('hex')
-@app.route('/auth',methods=['POST'])
-def authorization():
-	if request.form['submit']=='Login':
-		try:
-			results = pg.get_user(request.form['Username'], request.form['Password'])
-			#LINE BELOW IS FOR UI DEVELOPMENT TESTING ONLY REMOVE THIS LINE FOR DEPLOYMENT
-			results=True
-			if results:
-				session['Username'] = request.form['Username']
-				session['Password'] = request.form['Password']
-				page=request.form["page"]
-				return redirect("/"+page)
-			else:
-				return redirect("/?failed=True&page="+page)
-		except:
-			return redirect("/?failed=True&page="+page)
-	elif request.form['submit']=='Register':
-		return redirect("/register")
 #call this method before every location except home and register
 def auth():
 	try:
@@ -35,6 +17,36 @@ def auth():
 			return True
 	except:
 		return False
+@app.route('/auth',methods=['POST'])
+def authorization():
+	if request.form['submit']=="Register":
+		return redirect("/register")
+	page=request.form["page"]
+	try:
+		results = pg.get_user(request.form['Username'], request.form['Password'])
+		#LINE BELOW IS FOR UI DEVELOPMENT TESTING ONLY REMOVE THIS LINE FOR DEPLOYMENT
+		if request.form['Username']:
+			results=True
+		if results:
+			session['Username'] = request.form['Username']
+			session['Password'] = request.form['Password']
+			return redirect("/"+page)
+		else:
+			return redirect("/?failed=True&page="+page)
+	except:
+		return redirect("/?failed=True&page="+page)
+@app.route('/registerLog',methods=['POST'])
+def registerLog():
+	#do database stuff here
+	try: 
+		#insert user into database
+		session['Username']=request.form['Username']
+		if(request.form['Password']==request.form['ConfirmPassword']):
+			return redirect("/index")
+		else:
+			return redirect("/register?failed=True")
+	except:
+		return redirect("/register?failed=True")
 @app.route('/')
 def home():
 	if not request.args:
@@ -42,7 +54,10 @@ def home():
 	return render_template('login.html',failed=request.args["failed"],page=request.args["page"],login=True)
 @app.route('/register')
 def register():
-	return render_template('login.html',disabled="disabled",login=True)
+	if not request.args:
+		return render_template('register.html',login=True)
+	else:
+		return render_template('register.html',failed=request.args["failed"],login=True)
 @app.route('/about')
 def about():
 	if not auth():

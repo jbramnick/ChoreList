@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block content %}
+	{% if failed=="True" %}
+		<script>alert("Passwords do not match");</script>
+	{% endif %}
+	<h1>Register</h1>
+	<div id='Register'>
+		<form id="loginForm" action='/registerLog' method='POST'>
+			<table><tr>
+			<td><span>Username:</span></td>
+			<td><input type="text" name="Username" ></input></td></tr>
+			<tr><td><span>Password:</span></td>
+			<td><input type="password" name="Password" ></input></td></tr>
+			<tr><td><span>Confirm Password:</span></td>
+			<td><input type="password" name="ConfirmPassword"/></td></tr>
+			<tr><td><span>Full Name:</span></td>
+			<td><input type=text" name="Fullname"/></td></tr>
+			</table>
+			<table>
+			<tr><td><input type="submit"  name="submit" value="Register"></td></tr>
+			</table>
+		</form>
+	</div>
+{% endblock %}
