@@ -1,13 +1,13 @@
 {% extends "layout.html" %}
 
 {% block content %}
-	{% if failed %}
+	{% if failed==True %}
 		<script>alert("Username or Password Incorrect");</script>
 	{% endif %}
 	<h1>Login</h1>
 	<div id='login'>
 		<form id="loginForm" action='/auth' method='POST'>
-			<input type="hidden" name="badLogin"/>
+			<input type="hidden" name="page" value={{page}}>
 			<table><tr>
 			<td><span>Username:</span></td>
 			<td><input type="text" name="Username" ></input></td></tr>

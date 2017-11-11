@@ -4,8 +4,10 @@
       <div class="row text-center text-lg-left">
         {% for thing in things %}
         <div class="col-lg-3 col-md-4 col-xs-6">
-          <a href="#" class="d-block mb-4 h-100">
-            <span>{{thing}}</span>
+          <a href="/choreLog?choreId={{thing[0]}}" class="d-block mb-4 h-100">
+            <span>
+	    	<table><tr><td style="height: 200px;width: 200px;background-color: powderblue;">{{thing[2]}}</td></tr></table>
+	    </span>
           </a>
         </div>
         {% endfor %}
