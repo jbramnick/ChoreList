@@ -7,15 +7,20 @@
 	<h1>Login</h1>
 	<div id='login'>
 		<form id="loginForm" action='/index' method='POST'>
+			<input type="hidden" name="badLogin"/>
 			<table><tr>
 			<td><span>Username:</span></td>
-			<td><input type="text" name="Username" {{disabled}}></input></td></tr>
+			<td><input type="text" name="Username" ></input></td></tr>
 			<tr><td><span>Password:</span></td>
-			<td><input type="password" name="Password" {{disabled}}></input></td></tr>
+			<td><input type="password" name="Password" ></input></td></tr>
 			{% if disabled %}
+				<tr><td><span>Confirm Password:</span></td>
+				<td><input type=password" name="ConfirmPassword"/></td></tr>
 				<tr><td><span>Full Name:</span></td>
 				<td><input type=text" name="Fullname"/></td></tr>
 			{% endif %}
+			</table>
+			<table>
 			<tr><td><input type="submit" name="submit"  value="Login" {{disabled}}></td>
 			<td><input type="submit"  name="submit" value="Register"></td></tr>
 			</table>
