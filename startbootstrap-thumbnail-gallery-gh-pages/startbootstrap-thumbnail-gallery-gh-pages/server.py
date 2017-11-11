@@ -29,7 +29,6 @@ def authorization():
 			results=True
 		if results:
 			session['Username'] = request.form['Username']
-			session['Password'] = request.form['Password']
 			return redirect("/"+page)
 		else:
 			return redirect("/?failed=True&page="+page)
@@ -50,7 +49,7 @@ def registerLog():
 @app.route('/')
 def home():
 	if not request.args:
-		return render_template('login.html',page="index",login=True)	
+		return render_template('login.html',page="chores",login=True)	
 	return render_template('login.html',failed=request.args["failed"],page=request.args["page"],login=True)
 @app.route('/register')
 def register():
@@ -68,13 +67,21 @@ def rewards():
 	if not auth():
 		return redirect("/?page=rewards&failed=False")
 	return render_template('rewards.html',rewardsPage="active",username=session['Username'])
-@app.route('/index')
+@app.route('/chores')
 def index():
 	if not auth():
-		return redirect("/?page=index&failed=False")
+		return redirect("/?page=chores&failed=False")
 	thing=[[1,2,3],[4,5,6]]
 	#should prolly put database stuff here
-	return render_template('index.html',username=session['Username'],choresPage="active",things=thing)
+	try:
+		if not request.args["choreLog"]:
+			choreLog=None
+		else:
+			choreLog=request.args["choreLog"]
+	except:
+		choreLog=None
+	print(choreLog)
+	return render_template('chores.html',username=session['Username'],choresPage="active",things=thing,choreLog=choreLog)
 @app.route('/profile')
 def profile():
 	if not auth():
@@ -82,6 +89,7 @@ def profile():
 	return render_template('profile.html',username=session['Username'],profilePage="active")
 @app.route('/choreLog')
 def choreLog():
-	return redirect("/index")
+	#remove chore from database
+	return redirect("/chores?choreLog=True")
 if __name__ == '__main__':
     app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)), debug = True)

@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
 
 {% block content %}
+	{% if choreLog=="True" %}
+		<script>alert("Chore logged and pending review from admin");</script>
+	{% endif %}
       <div class="row text-center text-lg-left">
         {% for thing in things %}
         <div class="col-lg-3 col-md-4 col-xs-6">
