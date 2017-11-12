@@ -80,7 +80,6 @@ def index():
 			choreLog=request.args["choreLog"]
 	except:
 		choreLog=None
-	print(choreLog)
 	return render_template('chores.html',username=session['Username'],choresPage="active",things=thing,choreLog=choreLog)
 @app.route('/profile')
 def profile():
