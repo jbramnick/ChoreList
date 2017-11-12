@@ -1,7 +1,24 @@
 {% extends "layout.html" %}
 
 {% block content %}
-	<div id='Rewards'>
-		<span>Welcome to the rewards page</span>
-	</div>
+	{% if rewardLog=="True" %}
+		<script>alert("Reward puchased talk to admin has been notified");</script>
+	{% endif %}
+      <div class="row text-center text-lg-left">
+        {% for thing in things %}
+        <div class="col-lg-3 col-md-4 col-xs-6">
+          <a href="/rewardLog?rewardId={{thing[0]}}" class="d-block mb-4 h-100">
+            <span>
+	    	<table>
+		<tr>
+		<td align="center" style="height: 200px;width: 200px;background-color: powderblue;">{{thing[2]}}</td>
+		<td valign="top" style="background-color: powderblue;">Stock:{{thing[1]}}</td>
+		</tr>
+		</table>
+	    </span>
+          </a>
+        </div>
+        {% endfor %}
+        
+      </div>
 {% endblock %}

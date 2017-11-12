@@ -8,7 +8,7 @@ import data_postgres as pg
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24).encode('hex')
-#call this method before every location except home and register
+#call this method before every user page
 def auth():
 	try:
 		if not session['Username']:
@@ -24,9 +24,10 @@ def authorization():
 	page=request.form["page"]
 	try:
 		results = pg.get_user(request.form['Username'], request.form['Password'])
-		#LINE BELOW IS FOR UI DEVELOPMENT TESTING ONLY REMOVE THIS LINE FOR DEPLOYMENT
+		#LINES BELOW ARE FOR UI DEVELOPMENT TESTING ONLY REMOVE THESE LINES FOR DEPLOYMENT
 		if request.form['Username']:
 			results=True
+		#END UI TESTING LINES
 		if results:
 			session['Username'] = request.form['Username']
 			return redirect("/"+page)
@@ -66,7 +67,15 @@ def about():
 def rewards():
 	if not auth():
 		return redirect("/?page=rewards&failed=False")
-	return render_template('rewards.html',rewardsPage="active",username=session['Username'])
+	thing=[[1,2,3],[4,5,6]]
+	try:
+		if not request.args["rewardLog"]:
+			rewardLog=None
+		else:
+			rewardLog=request.args["rewardLog"]
+	except:
+		rewardLog=None
+	return render_template('rewards.html',rewardsPage="active",username=session['Username'],things=thing,rewardLog=rewardLog)
 @app.route('/chores')
 def index():
 	if not auth():
@@ -90,5 +99,9 @@ def profile():
 def choreLog():
 	#remove chore from database
 	return redirect("/chores?choreLog=True")
+@app.route('/rewardLog')
+def rewardLog():
+	#remove a rewards stock from database
+	return redirect("/rewards?rewardLog=True")
 if __name__ == '__main__':
     app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)), debug = True)
