@@ -84,7 +84,7 @@ def register():
 def about():
 	if not auth():
 		return redirect("/?page=about&failed=False")
-	return render_template('about.html',\
+	return render_template('About.html',\
 	username=session['Username'],\
 	aboutPage="active",\
 	points=session['Points'])
