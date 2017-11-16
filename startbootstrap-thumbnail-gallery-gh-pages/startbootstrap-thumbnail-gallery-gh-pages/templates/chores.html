@@ -4,7 +4,9 @@
 	{% if choreLog=="True" %}
 		<script>alert("Chore logged and pending review from admin");</script>
 	{% endif %}
+	
       <div class="row text-center text-lg-left">
+      {% if group %}
         {% for thing in things %}
         <div class="col-lg-3 col-md-4 col-xs-6">
           <a href="/choreLog?choreId={{thing[0]}}" class="d-block mb-4 h-100">
@@ -13,7 +15,12 @@
 	    </span>
           </a>
         </div>
+	
         {% endfor %}
-        
+	{% else %}
+	<span> You must choose a group </span>
+       {% endif %} 
       </div>
+      
+      
 {% endblock %}

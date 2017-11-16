@@ -25,41 +25,31 @@ def authorization():
 	page=request.form["page"]
 	try:
 		results = pg.get_user(request.form['Username'], request.form['Password'])
-		#UI TESTING
-		if request.form['Username']:
-			results=True
-		#END UI TESTING
 		if results:
-			
 			userinfo = pg.get_auth(request.form['Username'])
 			print(userinfo)
 			#MB# The above returns a list of lists with these elements: [name, points, group_name]
 			#MB# This is to join a default group (the first group in the list)
 			session['Username'] = request.form['Username']
-
 			if userinfo:
 				session['Name'] = userinfo[0][0]
 				points=userinfo[0][1]
 				session['Points'] = points
 				#MB# Added session Group for the name of the group the user defaults to on login
 				session['Group'] = userinfo[0][2]
+				return redirect("/"+page+"?GroupId="+session['Group'])
 			else: #MB# Added if/else. If userinfo does not have any rows it is because the user is 
 				#not a part of any groups yet.
-				#UI TESTING
-				points=20
-				session['Points']=points
-				
-				#END UI TESTING
+				#ill probably render the chore page with an "choose group message or something"
 				#MB# Please add here whatever you need to render a page with no groups yet.
 				#Make sure front end handles no group session and no points session variables
-
-			return redirect("/"+page)
+				session['Username']=request.form['Username']
+				session['Points']=0
+				session['Group']=None
+				return redirect("/"+page)
 		else:
 			return redirect("/?failed=True&page="+page)
 	except:
-		#UI TESTING
-		session['Username']=request.form['Username']
-		#END UI TESTING
 		return redirect("/?failed=True&page="+page)
 		
 @app.route('/registerLog',methods=['POST'])
@@ -146,7 +136,8 @@ def about():
 	return render_template('About.html',\
 	username=session['Username'],\
 	aboutPage="active",\
-	points=session['Points'])
+	points=session['Points'],\
+	group=session['Group'])
 @app.route('/rewards')
 def rewards():
 	if not auth():
@@ -172,7 +163,8 @@ def rewards():
 	username=session['Username'],\
 	things=thing,\
 	rewardLog=rewardLog,\
-	points=session['Points'])
+	points=session['Points'],\
+	group=session['Group'])
 	
 @app.route('/chores')
 def index():
@@ -183,7 +175,6 @@ def index():
 	#i will pass you a group variable likely going to be session['Group']
 	#the format of the list should be this
 	#chores = pg.get_all_chores(session['Group'])
-	
 	#MB# The above gets all chores whether claimed or not in the structure [id, name, points] 
 	#[chore id,chore name,chore point value]
 	try:
@@ -198,8 +189,8 @@ def index():
 	choresPage="active",\
 	things=thing,\
 	choreLog=choreLog,\
-	points=session['Points'])
-	
+	points=session['Points'],\
+	group=session['Group'])
 @app.route('/profile')
 def profile():
 	if not auth():
@@ -207,6 +198,7 @@ def profile():
 	return render_template('profile.html',\
 	username=session['Username'],\
 	profilePage="active",\
-	points=session['Points'])
+	points=session['Points'],\
+	group=session['Group'])
 if __name__ == '__main__':
     app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)), debug = True)
