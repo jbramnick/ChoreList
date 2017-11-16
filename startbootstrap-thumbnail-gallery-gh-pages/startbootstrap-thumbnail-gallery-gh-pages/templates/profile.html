@@ -6,8 +6,10 @@
 		$(document).ready(function(){
 			$('.changePassButton').click(function(){
 				if($('.changePassField').css('display')=='none'){
+					document.getElementById("changePassButton").innerHTML="Don't Change Password";
 					$('.changePassField').show();	
 				}else{
+					document.getElementById("changePassButton").innerHTML="Change Password";
 					$('.changePassField').hide();
 				}
 				
@@ -33,7 +35,18 @@
 			<td name="changePassButton" class="changePassButton">
 			<button id="changePassButton" type="button" class="btn btn-warning">Change Password</button></td>
 			</tr>
-			<tr><td class="changePassField"
+			<tr><td class="changePassField" style="display:none;"><span>Old Password:</span></td>
+			<td class="changePassField" style="display:none;">
+			<input type="password" name="OldPassword"></td>
+			</tr>
+			<td class="changePassField" style="display:none;"><span>New Password:</span></td>
+			<td class="changePassField" style="display:none;">
+			<input type="password" name="NewPassword"></td>
+			<tr>
+			<td class="changePassField" style="display:none;"><span>Confirm New Password:</span></td>
+			<td class="changePassField" style="display:none;">
+			<input type="password" name="ConfirmNewPassword"></td>
+			</tr>
 			</table>
 			<table>
 			<tr><td><input type="submit"  name="submit" value="Change" class="btn btn-success"></td></tr>
