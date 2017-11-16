@@ -36,6 +36,35 @@ def get_reward(group_id):
 	print(results)
 	conn.close()
 	return results
+	
+def add_points(username, group_id, points):
+	conn = connectToDB()
+	if conn == None:
+		return None
+	query_string = "SELECT points FROM users WHERE id = (SELECT id FROM usernames WHERE username = %s) AND group_id = %s"
+	testresults = execute_query(query_string, conn, args=(username, group_id))
+	if testresults:
+		total = int(testresults[0][0]) + points
+		query_string1 = "UPDATE users SET points = %s WHERE id = (SELECT id FROM usernames WHERE username = %s AND group_id = %s)"
+		execute_query(query_string1, conn, select=False,  args=(total, username, group_id))
+		conn.close()
+		return True
+	conn.close()
+	return False
+	
+def edit_points(username, group_id, points):
+	conn = connectToDB()
+	if conn == None:
+		return None
+	query_string = "SELECT points FROM users WHERE id = (SELECT id FROM usernames WHERE username = %s) AND group_id = %s"
+	testresults = execute_query(query_string, conn, args=(username, group_id))
+	if testresults:
+		query_string1 = "UPDATE users SET points = %s WHERE id = (SELECT id FROM usernames WHERE username = %s AND group_id = %s)"
+		execute_query(query_string1, conn, select=False,  args=(points, username, group_id))
+		conn.close()
+		return True
+	conn.close()
+	return False
 
 def get_all_chores(group_id):
 	conn=connectToDB()
