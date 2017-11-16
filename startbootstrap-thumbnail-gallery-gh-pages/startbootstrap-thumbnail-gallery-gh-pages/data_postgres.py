@@ -15,15 +15,15 @@ def execute_query(query, conn, select=True, args=None):
 	results = None
 	try: 
 		quer = cur.mogrify(query, args) 
-		#print(quer)
+		print(quer)
 		cur.execute(quer)
 		if select:
 			results = cur.fetchall()
 		conn.commit()  
 	except Exception as e:
 		conn.rollback()
-		#print(type(e))
-		#print(e)
+		print(type(e))
+		print(e)
 	cur.close()      
 	return results
 
@@ -79,14 +79,12 @@ def register_user(username, password, name):
 	results = None
 	if not results2:
 		query_string = "INSERT INTO usernames (username, name) VALUES(%s, %s)"
-		results = execute_query(query_string, conn, args=(username, name))
-		print(results)
+		results = execute_query(query_string, conn, select=False, args=(username, name))
 		query_string = "INSERT INTO pass (id, password) VALUES((SELECT id FROM usernames WHERE username = %s), crypt(%s, gen_salt('bf')))"
-		results = execute_query(query_string, conn, args=(username, password))
-		print(results)
+		results = execute_query(query_string, conn, select=False, args=(username, password))
 		conn.close()
 		return True
-		
+	print("Stuff is done")
 	conn.close()
 	return False
     

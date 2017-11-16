@@ -32,11 +32,13 @@ def authorization():
 		if results:
 			
 			userinfo = pg.get_auth(request.form['Username'])
+			print(userinfo)
 			#MB# The above returns a list of lists with these elements: [name, points, group_name]
 			#MB# This is to join a default group (the first group in the list)
 			session['Username'] = request.form['Username']
-			session['Name'] = userinfo[0][0]
+
 			if userinfo:
+				session['Name'] = userinfo[0][0]
 				points=userinfo[0][1]
 				session['Points'] = points
 				#MB# Added session Group for the name of the group the user defaults to on login
@@ -46,6 +48,7 @@ def authorization():
 				#UI TESTING
 				points=20
 				session['Points']=points
+				
 				#END UI TESTING
 				#MB# Please add here whatever you need to render a page with no groups yet.
 				#Make sure front end handles no group session and no points session variables
