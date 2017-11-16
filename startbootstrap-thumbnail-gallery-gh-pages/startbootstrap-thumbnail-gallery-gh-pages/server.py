@@ -38,7 +38,6 @@ def authorization():
 			session['Name'] = userinfo[0][0]
 			if userinfo:
 				points=userinfo[0][1]
-				
 				session['Points'] = points
 				#MB# Added session Group for the name of the group the user defaults to on login
 				session['Group'] = userinfo[0][2]
@@ -55,6 +54,9 @@ def authorization():
 		else:
 			return redirect("/?failed=True&page="+page)
 	except:
+		#UI TESTING
+		session['Username']=request.form['Username']
+		#END UI TESTING
 		return redirect("/?failed=True&page="+page)
 		
 @app.route('/registerLog',methods=['POST'])
