@@ -25,10 +25,10 @@ def authorization():
 	page=request.form["page"]
 	try:
 		results = pg.get_user(request.form['Username'], request.form['Password'])
-		#LINES BELOW ARE FOR UI DEVELOPMENT TESTING ONLY REMOVE THESE LINES FOR DEPLOYMENT
+		#UI TESTING
 		if request.form['Username']:
 			results=True
-		#END UI TESTING LINES
+		#END UI TESTING
 		if results:
 			userinfo = pg.get_auth(request.form['Username'])
 			#MB# The above returns a list of lists with these elements: [name, points, group_name]
@@ -36,12 +36,18 @@ def authorization():
 			session['Username'] = request.form['Username']
 			if userinfo:
 				points=userinfo[0][1]
+				
 				session['Points'] = points
 				#MB# Added session Group for the name of the group the user defaults to on login
 				session['Group'] = userinfo[0][2]
-			else: #MB# Added if/else. If userinfo does not have any rows it is because the user is not a part of any groups yet.
-				#MB# Please add here whatever you need to render a page with no groups yet. Make sure front end handles no group session and no points session variables
-				pass
+			else: #MB# Added if/else. If userinfo does not have any rows it is because the user is 
+				#not a part of any groups yet.
+				#UI TESTING
+				points=20
+				session['Points']=points
+				#END UI TESTING
+				#MB# Please add here whatever you need to render a page with no groups yet.
+				#Make sure front end handles no group session and no points session variables
 			return redirect("/"+page)
 		else:
 			return redirect("/?failed=True&page="+page)
@@ -52,6 +58,7 @@ def authorization():
 def registerLog():
 	#DATABASE
 	#MB# Can you confirm what you want here and what registerLog does? 
+	#Fields for request: Username,Password,ConfirmPassword,Fullname
 	try: 
 		#insert user into database
 		#DATABASE
@@ -59,7 +66,9 @@ def registerLog():
 		session['Points']=20
 		if(request.form['Password']==request.form['ConfirmPassword']):
 			#MB# do you want adding to the database to be done here, only when passwords match?
-			return redirect("/index")
+			#yes only do adding here set there username to Username, Password to Password,
+			# and Full name to Fullname
+			return redirect("/chores")
 		else:
 			return redirect("/register?failed=True")
 	except:
@@ -70,12 +79,15 @@ def choreLog():
 	#DATABASE
 	#remove chore from database
 	#MB# Do you want to remove a specific chore? if so give me the variable I need to identify which chore
+	#im going to pass you a chore id to remove rather to set to awaiting verification or whatever it will likely be
+	#request.args['choreId']
 	return redirect("/chores?choreLog=True")
 	
 @app.route('/rewardLog')
 def rewardLog():
 	#DATABASE
 	#MB# please provide name of the request.form[''] variable to identify the reward
+	#its going to be a request.args['rewardId'] not form since im passing it through a link not a form submit
 	#remove a rewards stock from database
 	#also change the session['Points'] value 
 	#Change it for the user
@@ -85,6 +97,15 @@ def rewardLog():
 def profileDelta():
 	#DATABASE
 	#MB# Please list the info you need for the profile
+	#Some form data will be coming in here
+	#need to just change the values in the database for what i pass
+	#this method will update rows in the database.If only updating name it is a simple update
+	#if user wants to make a new password they then have to enter their old password and then enter a new password
+	# and enter it again to confirm this method will then need to check if the old password is correct (database call)
+	# it will then check if the passwords are the same(simple python code) then update the password if the old is correct
+	# and the confirm and new password fields are equal
+	#relevant fields:
+	#
 	return redirect("/profile")
 	
 @app.route('/')
@@ -114,6 +135,9 @@ def rewards():
 		return redirect("/?page=rewards&failed=False")
 	#DATABASE
 	#MB# Specify what database values for what you need here. Is it just a list of rewards? if so what values do you need?
+	#ANSWER-Need another list of lists here with the same group session variable(session['group']) 
+	#format of list
+	#[reward id, reward name, reward stock, reward point value]
 	thing=[[1,2,3],[4,5,6]]
 	try:
 		if not request.args["rewardLog"]:
@@ -136,6 +160,10 @@ def index():
 	thing=[[1,2,3],[4,5,6]]
 	#DATABASE
 	#MB# Specify what database values for what you need here. Is it just a list of Chores? if so what values do you need?
+	#ANSWER-Need a list of lists the list being all chores for the group that the user is in
+	#i will pass you a group variable likely going to be session['group']
+	#the format of the list should be this
+	#[chore id,chore name,chore point value]
 	try:
 		if not request.args["choreLog"]:
 			choreLog=None
@@ -152,8 +180,6 @@ def index():
 	
 @app.route('/profile')
 def profile():
-	#DATABASE
-	#MB# please specify what data you need
 	if not auth():
 		return redirect("/?page=profile&failed=False")
 	return render_template('profile.html',\
