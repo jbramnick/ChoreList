@@ -41,7 +41,7 @@ def authorization():
 				session['Group'] = userinfo[0][2]
 			else: #MB# Added if/else. If userinfo does not have any rows it is because the user is not a part of any groups yet.
 				#MB# Please add here whatever you need to render a page with no groups yet. Make sure front end handles no group session and no points session variables
-				pass
+				session['Points'] = 0
 			return redirect("/"+page)
 		else:
 			return redirect("/?failed=True&page="+page)
