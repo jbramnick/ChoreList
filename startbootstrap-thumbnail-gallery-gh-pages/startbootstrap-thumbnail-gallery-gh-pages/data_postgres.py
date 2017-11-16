@@ -27,6 +27,25 @@ def execute_query(query, conn, select=True, args=None):
 	cur.close()      
 	return results
 
+def get_reward(group_id):
+	conn=connectToDB()
+	if conn == None:
+		return None
+	query_string = "SELECT id, name, stock, cost as value FROM reward WHERE group_id = %s"
+	results = execute_query(query_string, conn, args=(group_id, ))
+	print(results)
+	conn.close()
+	return results
+
+def get_all_chores(group_id):
+	conn=connectToDB()
+	if conn == None:
+		return None
+	query_string = "SELECT id, name, rewardVal as points FROM chore WHERE group_id = %s"
+	results = execute_query(query_string, conn, args=(group_id, ))
+	print(results)
+	conn.close()
+	return results
 
 def get_user(username, password):
 	conn=connectToDB()
@@ -36,7 +55,10 @@ def get_user(username, password):
 	results = execute_query(query_string, conn, args=(username, password))
 	print(results)
 	conn.close()
-	return results
+	if results:
+		return True
+	else:
+		return False
 	
 def get_auth(username):
 	conn=connectToDB()
@@ -47,7 +69,7 @@ def get_auth(username):
 	print(results)
 	conn.close()
 	return results
-	
+
 def register_user(username, password, name):
 	conn=connectToDB()
 	if conn == None:

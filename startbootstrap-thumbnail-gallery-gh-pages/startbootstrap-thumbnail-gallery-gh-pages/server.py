@@ -109,6 +109,9 @@ def profileDelta():
 	# and the confirm and new password fields are equal
 	#relevant fields:
 	#
+	
+	#MB# I will post below the functions that return True if password matches and False if it doesnt
+	pg.get_user(username, password)
 	return redirect("/profile")
 	
 @app.route('/')
@@ -120,7 +123,7 @@ def home():
 @app.route('/register')
 def register():
 	#MB# Below is the function to register a new user, it already checks if the user exists. It will return true if it succeeds and false if the username already exists
-	# pg.register_user(username, password, name)
+	registerSuccess = pg.register_user(username, password, name)
 
 	if not request.args:
 		return render_template('register.html',login=True)
@@ -143,7 +146,10 @@ def rewards():
 	#MB# Specify what database values for what you need here. Is it just a list of rewards? if so what values do you need?
 	#ANSWER-Need another list of lists here with the same group session variable(session['group']) 
 	#format of list
+	
 	#[reward id, reward name, reward stock, reward point value]
+	thing2 = pg.get_reward(session['Group'])
+	# Above lists all rewards for a group in the format [id, name, stock, value]
 	thing=[[1,2,3],[4,5,6]]
 	try:
 		if not request.args["rewardLog"]:
@@ -164,11 +170,12 @@ def index():
 	if not auth():
 		return redirect("/?page=chores&failed=False")
 	thing=[[1,2,3],[4,5,6]]
-	#DATABASE
-	#MB# Specify what database values for what you need here. Is it just a list of Chores? if so what values do you need?
 	#ANSWER-Need a list of lists the list being all chores for the group that the user is in
-	#i will pass you a group variable likely going to be session['group']
+	#i will pass you a group variable likely going to be session['Group']
 	#the format of the list should be this
+	chores = pg.get_all_chores(session['Group'])
+	
+	#MB# The above gets all chores whether claimed or not in the structure [id, name, points] 
 	#[chore id,chore name,chore point value]
 	try:
 		if not request.args["choreLog"]:
