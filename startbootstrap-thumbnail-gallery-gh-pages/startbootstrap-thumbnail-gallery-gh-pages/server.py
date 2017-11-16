@@ -105,7 +105,7 @@ def profileDelta():
 	# it will then check if the passwords are the same(simple python code) then update the password if the old is correct
 	# and the confirm and new password fields are equal
 	#relevant fields:
-	#
+	#Username,OldPassword,NewPassword,ConfirmNewPassword(all in the request.form[''])
 	return redirect("/profile")
 	
 @app.route('/')
