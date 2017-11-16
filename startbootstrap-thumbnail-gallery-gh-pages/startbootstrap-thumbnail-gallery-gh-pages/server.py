@@ -70,10 +70,12 @@ def registerLog():
 		session['Username']=request.form['Username']
 		session['Points']=20
 		if(request.form['Password']==request.form['ConfirmPassword']):
-			#MB# do you want adding to the database to be done here, only when passwords match?
-			#yes only do adding here set there username to Username, Password to Password,
-			# and Full name to Fullname
-			return redirect("/chores")
+			registerSuccess = pg.register_user(request.form['Username'],request.form['Password'],\
+			request.form['Fullname'])
+			if(registerSuccess):
+				return redirect("/chores")
+			else:
+				return redirect("/register?failed=True")
 		else:
 			return redirect("/register?failed=True")
 	except:
@@ -127,7 +129,7 @@ def home():
 @app.route('/register')
 def register():
 	#MB# Below is the function to register a new user, it already checks if the user exists. It will return true if it succeeds and false if the username already exists
-	registerSuccess = pg.register_user(username, password, name)
+	
 
 	if not request.args:
 		return render_template('register.html',login=True)
@@ -177,7 +179,7 @@ def index():
 	#ANSWER-Need a list of lists the list being all chores for the group that the user is in
 	#i will pass you a group variable likely going to be session['Group']
 	#the format of the list should be this
-	chores = pg.get_all_chores(session['Group'])
+	#chores = pg.get_all_chores(session['Group'])
 	
 	#MB# The above gets all chores whether claimed or not in the structure [id, name, points] 
 	#[chore id,chore name,chore point value]
