@@ -108,10 +108,12 @@ def profileDelta():
 	# it will then check if the passwords are the same(simple python code) then update the password if the old is correct
 	# and the confirm and new password fields are equal
 	#relevant fields:
-	#
-	
+
 	#MB# I will post below the functions that return True if password matches and False if it doesnt
 	pg.get_user(username, password)
+
+	#Username,OldPassword,NewPassword,ConfirmNewPassword(all in the request.form[''])
+
 	return redirect("/profile")
 	
 @app.route('/')
