@@ -47,6 +47,26 @@ def get_auth(username):
 	print(results)
 	conn.close()
 	return results
+	
+def register_user(username, password, name):
+	conn=connectToDB()
+	if conn == None:
+		return None
+	query_string = "SELECT username FROM usernames WHERE username = %s"
+	results2 = execute_query(query_string, conn, args=(username,))
+	results = None
+	if not results2:
+		query_string = "INSERT INTO usernames (username, name) VALUES(%s, %s)"
+		results = execute_query(query_string, conn, args=(username, name))
+		print(results)
+		query_string = "INSERT INTO pass (id, password) VALUES((SELECT id FROM usernames WHERE username = %s), crypt(%s, gen_salt('bf')))"
+		results = execute_query(query_string, conn, args=(username, password))
+		print(results)
+		conn.close()
+		return True
+		
+	conn.close()
+	return False
     
 def new_player(username, password, name):
 	conn = connectToDB()

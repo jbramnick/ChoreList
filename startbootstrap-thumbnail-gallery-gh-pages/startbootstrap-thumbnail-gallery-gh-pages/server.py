@@ -30,10 +30,12 @@ def authorization():
 			results=True
 		#END UI TESTING
 		if results:
+			
 			userinfo = pg.get_auth(request.form['Username'])
 			#MB# The above returns a list of lists with these elements: [name, points, group_name]
 			#MB# This is to join a default group (the first group in the list)
 			session['Username'] = request.form['Username']
+			session['Name'] = userinfo[0][0]
 			if userinfo:
 				points=userinfo[0][1]
 				
@@ -48,6 +50,7 @@ def authorization():
 				#END UI TESTING
 				#MB# Please add here whatever you need to render a page with no groups yet.
 				#Make sure front end handles no group session and no points session variables
+
 			return redirect("/"+page)
 		else:
 			return redirect("/?failed=True&page="+page)
@@ -116,6 +119,9 @@ def home():
 	
 @app.route('/register')
 def register():
+	#MB# Below is the function to register a new user, it already checks if the user exists. It will return true if it succeeds and false if the username already exists
+	# pg.register_user(username, password, name)
+
 	if not request.args:
 		return render_template('register.html',login=True)
 	else:
