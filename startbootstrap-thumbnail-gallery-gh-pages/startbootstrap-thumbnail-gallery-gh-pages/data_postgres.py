@@ -37,6 +37,16 @@ def get_reward(group_id):
 	conn.close()
 	return results
 	
+def get_groups(username):
+	conn=connectToDB()
+	if conn == None:
+		return None
+	query_string = "SELECT g.id, g.name FROM groups JOIN users u ON u.group_id = g.id WHERE u.id = (SELECT id FROM usernames WHERE username = %s) AND u.group_id = g.id"
+	results = execute_query(query_string, conn, args=(username, ))
+	print(results)
+	conn.close()
+	return results
+	
 def add_points(username, group_id, points):
 	conn = connectToDB()
 	if conn == None:
