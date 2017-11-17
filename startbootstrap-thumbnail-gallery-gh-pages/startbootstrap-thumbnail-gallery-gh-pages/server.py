@@ -84,6 +84,8 @@ def rewardLog():
 	
 @app.route('/profileDelta',methods=['POST'])
 def profileDelta():
+	if not auth():
+		return redirect("/?page=profile&failed=False")
 	try:
 		oldPassword=request.form['OldPassword']
 	except:
@@ -100,17 +102,17 @@ def profileDelta():
 		newUsername=request.form['Username']
 	except:
 		newUsername=None
+	print(newUsername)
+	if(newUsername):
+		if not pg.change_username(session['Username'],oldPassword,newUsername):
+			return redirect("/profile?FailedUsername=True")
+		session['Username']=newUsername
 	if(oldPassword and newPassword and confirmNew):
 		if(newPassword==confirmNew):
 			if not pg.change_password(session['Username'],oldPassword,newPassword):
 				return redirect("/profile?FailedOld=True")
 		else:
 			return redirect("/profile?FailedConfirm=True")
-	if(newUsername):
-		print("we coooooooooooooooooooooooooooooooooooool")
-		if not pg.change_username(session['Username'],oldPassword,newUsername):
-			session['Username']=newUsername
-			return redirect("/profile?FailedUsername=True")
 	return redirect("/profile")
 	
 @app.route('/')
