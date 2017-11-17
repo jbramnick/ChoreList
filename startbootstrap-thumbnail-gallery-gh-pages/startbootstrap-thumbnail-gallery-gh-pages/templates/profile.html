@@ -7,9 +7,13 @@
 			$('.changePassButton').click(function(){
 				if($('.changePassField').css('display')=='none'){
 					document.getElementById("changePassButton").innerHTML="Don't Change Password";
+					$('.changePassField').attr('required','required');
+					$('#changeUserName').removeAttr('required');
 					$('.changePassField').show();	
 				}else{
 					document.getElementById("changePassButton").innerHTML="Change Password";
+					$('.changePassField').removeAttr('required');
+					$('#changeUserName').attr('required','required');
 					$('.changePassField').hide();
 				}
 				
@@ -23,29 +27,29 @@
 			}
 		}*/
 	</script>
-	{% if failed=="True" %}
-		<script>alert("Username or Password Incorrect");</script>
+	{% if failedConfirm=="True" %}
+		<script>alert("Passwords do not match");</script>
 	{% endif %}
 	<h1>Profile Edit</h1>
 	<div id='Profile'>
 		<form id="profileForm" action='/profileDelta' method='POST'>
 			<table><tr>
 			<td><span>Username:</span></td>
-			<td><input type="text" name="Username">{{Username}}</input></td>
+			<td><input id="changeUserName" type="text" name="Username" required="required">{{Username}}</input></td>
 			<td name="changePassButton" class="changePassButton">
 			<button id="changePassButton" type="button" class="btn btn-warning">Change Password</button></td>
 			</tr>
-			<tr><td class="changePassField" style="display:none;"><span>Old Password:</span></td>
-			<td class="changePassField" style="display:none;">
-			<input type="password" name="OldPassword"></td>
+			<tr><td><span>Password:</span></td>
+			<td>
+			<input type="password" name="OldPassword" required="required"></td>
 			</tr>
 			<td class="changePassField" style="display:none;"><span>New Password:</span></td>
 			<td class="changePassField" style="display:none;">
-			<input type="password" name="NewPassword"></td>
+			<input type="password" name="NewPassword" class="changePassField"></td>
 			<tr>
 			<td class="changePassField" style="display:none;"><span>Confirm New Password:</span></td>
 			<td class="changePassField" style="display:none;">
-			<input type="password" name="ConfirmNewPassword"></td>
+			<input type="password" name="ConfirmNewPassword" class="changePassField"></td>
 			</tr>
 			</table>
 			<table>

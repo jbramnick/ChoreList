@@ -28,21 +28,14 @@ def authorization():
 		if results:
 			userinfo = pg.get_auth(request.form['Username'])
 			print(userinfo)
-			#MB# The above returns a list of lists with these elements: [name, points, group_name]
-			#MB# This is to join a default group (the first group in the list)
 			session['Username'] = request.form['Username']
 			if userinfo:
 				session['Name'] = userinfo[0][0]
 				points=userinfo[0][1]
 				session['Points'] = points
-				#MB# Added session Group for the name of the group the user defaults to on login
 				session['Group'] = userinfo[0][2]
 				return redirect("/"+page+"?GroupId="+session['Group'])
-			else: #MB# Added if/else. If userinfo does not have any rows it is because the user is 
-				#not a part of any groups yet.
-				#ill probably render the chore page with an "choose group message or something"
-				#MB# Please add here whatever you need to render a page with no groups yet.
-				#Make sure front end handles no group session and no points session variables
+			else:  
 				session['Username']=request.form['Username']
 				session['Points']=0
 				session['Group']=None
@@ -54,14 +47,10 @@ def authorization():
 		
 @app.route('/registerLog',methods=['POST'])
 def registerLog():
-	#DATABASE
-	#MB# Can you confirm what you want here and what registerLog does? 
-	#Fields for request: Username,Password,ConfirmPassword,Fullname
 	try: 
-		#insert user into database
-		#DATABASE
 		session['Username']=request.form['Username']
-		session['Points']=20
+		session['Group']=None
+		session['Points']=0
 		if(request.form['Password']==request.form['ConfirmPassword']):
 			registerSuccess = pg.register_user(request.form['Username'],request.form['Password'],\
 			request.form['Fullname'])
@@ -95,22 +84,33 @@ def rewardLog():
 	
 @app.route('/profileDelta',methods=['POST'])
 def profileDelta():
-	#DATABASE
-	#MB# Please list the info you need for the profile
-	#Some form data will be coming in here
-	#need to just change the values in the database for what i pass
-	#this method will update rows in the database.If only updating name it is a simple update
-	#if user wants to make a new password they then have to enter their old password and then enter a new password
-	# and enter it again to confirm this method will then need to check if the old password is correct (database call)
-	# it will then check if the passwords are the same(simple python code) then update the password if the old is correct
-	# and the confirm and new password fields are equal
-	#relevant fields:
-
-	#MB# I will post below the functions that return True if password matches and False if it doesnt
-	pg.get_user(username, password)
-
-	#Username,OldPassword,NewPassword,ConfirmNewPassword(all in the request.form[''])
-
+	try:
+		oldPassword=request.form['OldPassword']
+	except:
+		oldPassword=None
+	try:
+		newPassword=request.form['NewPassword']
+	except:
+		newPassword=None
+	try:
+		confirmNew=request.form['ConfirmNewPassword']
+	except:
+		confirmNew=None
+	try:
+		newUsername=request.form['Username']
+	except:
+		newUsername=None
+	if(oldPassword and newPassword and confirmNew):
+		if(newPassword==confirmNew):
+			if not pg.change_password(session['Username'],oldPassword,newPassword):
+				return redirect("/profile?FailedOld=True")
+		else:
+			return redirect("/profile?FailedConfirm=True")
+	if(newUsername):
+		print("we coooooooooooooooooooooooooooooooooooool")
+		if not pg.change_username(session['Username'],oldPassword,newUsername):
+			session['Username']=newUsername
+			return redirect("/profile?FailedUsername=True")
 	return redirect("/profile")
 	
 @app.route('/')
@@ -163,6 +163,7 @@ def rewards():
 	username=session['Username'],\
 	things=thing,\
 	rewardLog=rewardLog,\
+	#DATABASE
 	points=session['Points'],\
 	group=session['Group'])
 	
@@ -195,6 +196,17 @@ def index():
 def profile():
 	if not auth():
 		return redirect("/?page=profile&failed=False")
+	try:
+		failedConfirm=request.args["FailedConfirm"]
+	except:
+		failedConfirm=None
+	if(failedConfirm):
+		return render_template('profile.html',\
+		username=session['Username'],\
+		profilePage="active",\
+		points=session['Points'],\
+		group=session['Group'],\
+		failedConfirm=failedConfirm)
 	return render_template('profile.html',\
 	username=session['Username'],\
 	profilePage="active",\
