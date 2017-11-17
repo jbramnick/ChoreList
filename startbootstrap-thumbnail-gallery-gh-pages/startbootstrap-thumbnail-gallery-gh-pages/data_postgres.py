@@ -52,6 +52,38 @@ def add_points(username, group_id, points):
 	conn.close()
 	return False
 	
+def change_username(username, password, newusername):
+	conn = connectToDB()
+	if conn == None:
+		return None
+	query_string = "SELECT usernames.username FROM usernames JOIN pass ON pass.id = usernames.id WHERE usernames.username = %s AND pass.password = crypt(%s, password)"
+	testresults = execute_query(query_string, conn, args=(username, password))
+	query_string = "SELECT username FROM usernames WHERE username = %s"
+	testresults2 = execute_query(query_string, conn, args=(newusername, ))
+	if testresults and not testresults2:
+		query_string1 = "UPDATE usernames SET username = %s WHERE username = %s"
+		execute_query(query_string1, conn, select=False,  args=(newusername, username))
+		conn.close()
+		return True
+	else:
+		conn.close()
+		return False
+		
+def change_password(username, password, newpassword):
+	conn = connectToDB()
+	if conn == None:
+		return None
+	query_string = "SELECT usernames.username FROM usernames JOIN pass ON pass.id = usernames.id WHERE usernames.username = %s AND pass.password = crypt(%s, password)"
+	testresults = execute_query(query_string, conn, args=(username, password))
+	if testresults:
+		query_string1 = "UPDATE pass SET password = crypt(%s, gen_salt('bf')) WHERE password = crypt(%s, password)"
+		execute_query(query_string1, conn, select=False,  args=(newpassword, password))
+		conn.close()
+		return True
+	else:
+		conn.close()
+		return False
+	
 def edit_points(username, group_id, points):
 	conn = connectToDB()
 	if conn == None:
