@@ -107,7 +107,6 @@ def profileDelta():
 		else:
 			return redirect("/profile?FailedConfirm=True")
 	if(newUsername):
-		print("we coooooooooooooooooooooooooooooooooooool")
 		if not pg.change_username(session['Username'],oldPassword,newUsername):
 			session['Username']=newUsername
 			return redirect("/profile?FailedUsername=True")
