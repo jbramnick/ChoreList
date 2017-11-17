@@ -77,5 +77,5 @@ CREATE ROLE choreadmin WITH LOGIN;
 \password choreadmin
 /*Ag7Lb4$fS*/
 
-GRANT SELECT,INSERT,DELETE ON usernames, pass, chore, reward, admin, users, groups TO choreadmin;
+GRANT SELECT,INSERT,DELETE,UPDATE ON usernames, pass, chore, reward, admin, users, groups TO choreadmin;
 GRANT USAGE ON usernames_id_seq, chore_id_seq, reward_id_seq, groups_id_seq TO choreadmin;  
