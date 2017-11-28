@@ -33,10 +33,10 @@ def authorization():
 				session['Name'] = userinfo[0][0]
 				points=userinfo[0][1]
 				session['Points'] = points
-				session['Group'] = userinfo[0][2]
-				#session['Groups']=pg.get_groups(request.form['Username'])
+				session['Group'] = None
+				session['Groups']=pg.get_groups(request.form['Username'])
 				#UI TESTING
-				session['Groups']=[1,2,3,4]
+				#session['Groups']=[1,2,3,4]
 				#END UI TESTING
 				return redirect("/"+page+"?GroupId="+session['Group'])
 			else:  
@@ -44,8 +44,9 @@ def authorization():
 				session['Points']=0
 				session['Group']=None
 				session['Groups']=pg.get_groups(request.form['Username'])
+				print(session['Groups'])
 				#UI TESTING
-				session['Groups']=[1,2,3,4]
+				#session['Groups']=[1,2,3,4]
 				#END UI TESTING
 				return redirect("/"+page)
 		else:
