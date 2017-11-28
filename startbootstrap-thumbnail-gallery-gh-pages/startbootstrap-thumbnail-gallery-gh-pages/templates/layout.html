@@ -52,8 +52,9 @@
 			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Group
 			<span class="caret"></span></button>
 			<ul class="dropdown-menu">
-				<li><a href="#">sample</a></li>
-				<li>sample2</li>
+				{% for group in groups %}
+				<li><a href="#">{{group}}</a></li>
+				{% endfor %}
 			</ul>
 		</div>
 	    </li>
