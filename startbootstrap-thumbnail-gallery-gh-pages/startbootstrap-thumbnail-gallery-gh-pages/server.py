@@ -34,11 +34,19 @@ def authorization():
 				points=userinfo[0][1]
 				session['Points'] = points
 				session['Group'] = userinfo[0][2]
+				#session['Groups']=pg.get_groups(request.form['Username'])
+				#UI TESTING
+				session['Groups']=[1,2,3,4]
+				#END UI TESTING
 				return redirect("/"+page+"?GroupId="+session['Group'])
 			else:  
 				session['Username']=request.form['Username']
 				session['Points']=0
 				session['Group']=None
+				session['Groups']=pg.get_groups(request.form['Username'])
+				#UI TESTING
+				session['Groups']=[1,2,3,4]
+				#END UI TESTING
 				return redirect("/"+page)
 		else:
 			return redirect("/?failed=True&page="+page)
@@ -139,6 +147,7 @@ def about():
 	username=session['Username'],\
 	aboutPage="active",\
 	points=session['Points'],\
+	groups=session['Groups'],\
 	group=session['Group'])
 @app.route('/rewards')
 def rewards():
@@ -167,6 +176,7 @@ def rewards():
 	rewardLog=rewardLog,\
 	#DATABASE
 	points=session['Points'],\
+	groups=session['Groups'],\
 	group=session['Group'])
 	
 @app.route('/chores')
@@ -193,7 +203,8 @@ def index():
 	things=thing,\
 	choreLog=choreLog,\
 	points=session['Points'],\
-	group=session['Group'])
+	group=session['Group'],\
+	groups=session['Groups'])
 @app.route('/profile')
 def profile():
 	if not auth():
@@ -208,11 +219,13 @@ def profile():
 		profilePage="active",\
 		points=session['Points'],\
 		group=session['Group'],\
+		groups=session['Groups'],\
 		failedConfirm=failedConfirm)
 	return render_template('profile.html',\
 	username=session['Username'],\
 	profilePage="active",\
 	points=session['Points'],\
+	groups=session['Groups'],\
 	group=session['Group'])
 if __name__ == '__main__':
     app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)), debug = True)
