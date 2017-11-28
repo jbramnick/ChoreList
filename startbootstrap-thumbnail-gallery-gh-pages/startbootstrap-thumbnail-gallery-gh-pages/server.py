@@ -126,6 +126,11 @@ def profileDelta():
 def groupChange():
 	session['Group']=request.args['group']
 	return redirect("/chores")
+@app.route('/createGroupLog',methods=['POST'])
+def createGroupLog():
+	session['Groups'].append(request.form['Groupname'])
+	print session['Groups']
+	return redirect("/createGroup")
 @app.route('/')
 def home():
 	if not request.args:
