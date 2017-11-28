@@ -41,7 +41,7 @@ def get_groups(username):
 	conn=connectToDB()
 	if conn == None:
 		return None
-	query_string = "SELECT g.id, g.name FROM groups g JOIN users u ON u.group_id = g.id WHERE u.id = (SELECT id FROM usernames WHERE username = %s) AND u.group_id = g.id"
+	query_string = "SELECT g.id, g.name FROM groups g JOIN users u ON u.group_id = g.id JOIN admin a ON a.group_id = g.id WHERE (u.id = (SELECT id FROM usernames WHERE username = %s) AND u.group_id = g.id) OR a.group_id = g.id"
 	results = execute_query(query_string, conn, args=(username, ))
 	print(results)
 	conn.close()
