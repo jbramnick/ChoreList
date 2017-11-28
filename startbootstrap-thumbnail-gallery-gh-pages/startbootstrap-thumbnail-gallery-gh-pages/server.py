@@ -149,6 +149,16 @@ def about():
 	points=session['Points'],\
 	groups=session['Groups'],\
 	group=session['Group'])
+@app.route('/createGroup')
+def createGroup():
+	if not auth():
+		return redirect("/?page=createGroup&failed=False")
+	return render_template('createGroup.html',\
+	username=session['Username'],\
+	createGroupPage="active",\
+	points=session['Points'],\
+	groups=session['Groups'],\
+	group=session['Group'])
 @app.route('/rewards')
 def rewards():
 	if not auth():

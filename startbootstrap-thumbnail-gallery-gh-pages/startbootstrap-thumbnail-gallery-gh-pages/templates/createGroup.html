@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block content %}
+	<h1>Create Group</h1>
+	<div id='createGroup'>
+		<form id="createGroupForm" action='/auth' method='POST'>
+			<input type="hidden" name="page" value={{page}}>
+			<table><tr>
+			<td><span>Group Name:</span></td>
+			<td><input type="text" name="Username" ></input></td></tr>
+			</table>
+			<table>
+			<tr><td><input type="submit" name="submit" value="Create"></td>
+			</table>
+		</form>
+	</div>
+{% endblock %}

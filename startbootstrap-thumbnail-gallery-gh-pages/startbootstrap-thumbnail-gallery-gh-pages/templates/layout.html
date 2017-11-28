@@ -48,14 +48,22 @@
               <a class="nav-link" href="/about">About
 	      </a>
             </li>
+	     <li class="nav-item {{createGroupPage}}">
+              <a class="nav-link" href="/createGroup">Create Group
+	      </a>
+            </li>
 	    <li class="nav-item">
 	    	<div class="dropdown">
 			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Group
 			<span class="caret"></span></button>
 			<ul class="dropdown-menu">
+				{% if groups %}
 				{% for groupName in groups %}
 				<li><a href="/groupChange?group={{groupName}}">{{groupName}}</a></li>
 				{% endfor %}
+				{% else %}
+				<li><span>You have no gropus!</span></li>
+				{% endif %}
 			</ul>
 		</div>
 	    </li>
