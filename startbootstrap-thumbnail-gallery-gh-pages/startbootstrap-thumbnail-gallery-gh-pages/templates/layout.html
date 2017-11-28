@@ -59,7 +59,7 @@
 			<ul class="dropdown-menu">
 				{% if groups %}
 				{% for groupName in groups %}
-				<li><a href="/groupChange?group={{groupName}}">{{groupName}}</a></li>
+				<li><a href="/groupChange?group={{groupName[1]}}">{{groupName[1]}}</a></li>
 				{% endfor %}
 				{% else %}
 				<li><span>You have no gropus!</span></li>

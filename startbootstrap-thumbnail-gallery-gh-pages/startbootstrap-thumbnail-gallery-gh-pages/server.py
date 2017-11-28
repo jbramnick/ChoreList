@@ -44,7 +44,6 @@ def authorization():
 				session['Points']=0
 				session['Group']=None
 				session['Groups']=pg.get_groups(request.form['Username'])
-				print(session['Groups'])
 				#UI TESTING
 				#session['Groups']=[1,2,3,4]
 				#END UI TESTING
