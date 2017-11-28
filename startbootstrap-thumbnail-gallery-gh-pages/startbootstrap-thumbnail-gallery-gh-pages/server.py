@@ -128,15 +128,16 @@ def groupChange():
 	return redirect("/chores")
 @app.route('/createGroupLog',methods=['POST'])
 def createGroupLog():
-	session['Groups'].append(request.form['Groupname'])
-	print session['Groups']
+	if not auth:
+		return redirect("/?page=createGroup&failed=False")
+	pg.add_group(request.form['Groupname'],session['Username'])
+	session['Groups']=session['Groups']+[str(request.form['Groupname'])]
 	return redirect("/createGroup")
 @app.route('/')
 def home():
 	if not request.args:
 		return render_template('login.html',page="chores",login=True)	
 	return render_template('login.html',failed=request.args["failed"],page=request.args["page"],login=True)
-	
 @app.route('/register')
 def register():
 	if not request.args:
