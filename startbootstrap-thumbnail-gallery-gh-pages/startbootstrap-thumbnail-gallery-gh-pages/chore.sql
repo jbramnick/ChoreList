@@ -34,7 +34,7 @@ CREATE TABLE reward (
     group_id INT NOT NULL);
     
 CREATE TABLE admin (
-    id INT PRIMARY KEY,
+    id INT NOT NULL,
     group_id INT NOT NULL);
     
 CREATE TABLE users (

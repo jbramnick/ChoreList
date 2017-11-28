@@ -158,6 +158,24 @@ def register_user(username, password, name):
 	print("Stuff is done")
 	conn.close()
 	return False
+	
+def add_group(group_name, username):
+	conn=connectToDB()
+	if conn == None:
+		return None
+	query_string = "SELECT id FROM groups WHERE name = %s AND admin_id = (SELECT id FROM usernames WHERE username = %s)"
+	results2 = execute_query(query_string, conn, args=(group_name, username))
+	results = None
+	if not results2:
+		query_string = "INSERT INTO groups (name, admin_id) VALUES(%s, (SELECT id FROM usernames WHERE username = %s))"
+		results = execute_query(query_string, conn, select=False, args=(group_name, username))
+		query_string = "INSERT INTO admin (id, group_id) VALUES((SELECT id FROM usernames WHERE username = %s), (SELECT id FROM groups WHERE admin_id = (SELECT id FROM usernames WHERE username = %s) AND name = %s))"
+		results = execute_query(query_string, conn, select=False, args=(username, username, group_name))
+		conn.close()
+		return True
+	print("Stuff is done")
+	conn.close()
+	return False
     
 def new_player(username, password, name):
 	conn = connectToDB()
