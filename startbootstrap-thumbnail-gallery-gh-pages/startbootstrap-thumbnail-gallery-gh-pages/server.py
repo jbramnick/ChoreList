@@ -122,7 +122,10 @@ def profileDelta():
 		else:
 			return redirect("/profile?FailedConfirm=True")
 	return redirect("/profile")
-	
+@app.route('/groupChange')
+def groupChange():
+	session['Group']=request.args['group']
+	return redirect("/chores")
 @app.route('/')
 def home():
 	if not request.args:
@@ -131,9 +134,6 @@ def home():
 	
 @app.route('/register')
 def register():
-	#MB# Below is the function to register a new user, it already checks if the user exists. It will return true if it succeeds and false if the username already exists
-	
-
 	if not request.args:
 		return render_template('register.html',login=True)
 	else:
