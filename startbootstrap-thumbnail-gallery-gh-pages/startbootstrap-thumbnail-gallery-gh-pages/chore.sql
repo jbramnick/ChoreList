@@ -35,12 +35,10 @@ CREATE TABLE reward (
     
 CREATE TABLE admin (
     id INT PRIMARY KEY,
-    name TEXT,
     group_id INT NOT NULL);
     
 CREATE TABLE users (
     id INT PRIMARY KEY,
-    name TEXT,
     points INT DEFAULT 0,
     group_id INT NOT NULL);
     

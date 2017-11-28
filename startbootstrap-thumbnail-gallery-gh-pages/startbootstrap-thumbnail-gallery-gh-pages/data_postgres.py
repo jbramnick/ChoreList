@@ -135,7 +135,7 @@ def get_auth(username):
 	conn=connectToDB()
 	if conn == None:
 		return None
-	query_string = "SELECT u.name as name, u.points as points, g.name as group_name FROM users u JOIN groups g ON g.id = u.group_id WHERE u.id = (SELECT id FROM usernames WHERE username = %s)"
+	query_string = "SELECT u.points as points, g.name as group_name FROM users u JOIN groups g ON g.id = u.group_id WHERE u.id = (SELECT id FROM usernames WHERE username = %s)"
 	results = execute_query(query_string, conn, args=(username, ))
 	print(results)
 	conn.close()
