@@ -41,8 +41,8 @@ def get_groups(username):
 	conn=connectToDB()
 	if conn == None:
 		return None
-	query_string = "SELECT g.id, g.name FROM groups g JOIN users u ON u.group_id = g.id JOIN admin a ON a.group_id = g.id WHERE (u.id = (SELECT id FROM usernames WHERE username = %s) AND u.group_id = g.id) OR a.group_id = g.id"
-	results = execute_query(query_string, conn, args=(username, ))
+	query_string = "SELECT g.id, g.name FROM groups g LEFT JOIN users u ON u.group_id = g.id left JOIN admin a ON a.group_id = g.id WHERE u.id = (SELECT id FROM usernames WHERE username = %s) OR a.id = (SELECT id FROM usernames WHERE username = %s);"
+	results = execute_query(query_string, conn, args=(username, username))
 	print(results)
 	conn.close()
 	return results
@@ -176,7 +176,22 @@ def add_group(group_name, username):
 	print("Stuff is done")
 	conn.close()
 	return False
-    
+	
+def add_to_group(group_name, username):
+	conn=connectToDB()
+	if conn == None:
+		return None
+		
+	query_string = "SELECT id FROM users WHERE group_id = (SELECT id FROM groups WHERE name = %s) AND id = (SELECT id from usernames WHERE username = %s)"
+	results = execute_query(query_string, conn, args=(group_name, username))
+	if not results:
+		query_string = "INSERT INTO users (id, group_id) VALUES((SELECT id FROM usernames WHERE username = %s), (SELECT id FROM groups WHERE name = %s))"
+		results2 = execute_query(query_string, conn, select=False, args=(username, group_name))
+		conn.close()
+		return True
+	conn.close()
+	return False
+		
 def new_player(username, password, name):
 	conn = connectToDB()
 	if conn == None:

@@ -38,7 +38,7 @@ CREATE TABLE admin (
     group_id INT NOT NULL);
     
 CREATE TABLE users (
-    id INT PRIMARY KEY,
+    id INT,
     points INT DEFAULT 0,
     group_id INT NOT NULL);
     
