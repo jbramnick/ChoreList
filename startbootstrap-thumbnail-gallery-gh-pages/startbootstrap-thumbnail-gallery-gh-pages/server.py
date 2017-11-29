@@ -118,7 +118,7 @@ def createGroupLog():
 	if not auth:
 		return redirect("/?page=createGroup&failed=False")
 	pg.add_group(request.form['Groupname'],session['Username'])
-	session['Groups']=session['Groups']+[str(request.form['Groupname'])]
+	session['Groups']=session['Groups']+[[None,str(request.form['Groupname'])]]
 	return redirect("/createGroup")
 @app.route('/logOut')
 def logOut():
