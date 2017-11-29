@@ -30,6 +30,9 @@
 	{% if failedConfirm=="True" %}
 		<script>alert("Passwords do not match");</script>
 	{% endif %}
+	{% if FailedUsername=="True" %}
+		<script>alert("Password incorrect/username in use");</script>
+	{% endif %}
 	<h1>Profile Edit</h1>
 	<div id='Profile'>
 		<form id="profileForm" action='/profileDelta' method='POST'>

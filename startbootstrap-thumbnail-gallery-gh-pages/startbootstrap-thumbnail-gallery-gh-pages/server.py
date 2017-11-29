@@ -30,20 +30,18 @@ def authorization():
 			print(userinfo)
 			session['Username'] = request.form['Username']
 			if userinfo:
-				session['Name'] = userinfo[0][0]
 				points=userinfo[0][1]
 				session['Points'] = points
 				session['Group'] = None
 				session['Groups']=pg.get_groups(request.form['Username'])
-				
 				return redirect("/"+page+"?GroupId="+session['Group'])
 			else:  
 				session['Username']=request.form['Username']
-				session['Points']=0
+				session['Points']=None
 				session['Group']=None
 				session['Groups']=pg.get_groups(request.form['Username'])
 				print(session['Groups'])
-				
+
 				return redirect("/"+page)
 		else:
 			return redirect("/?failed=True&page="+page)
@@ -56,6 +54,7 @@ def registerLog():
 		session['Username']=request.form['Username']
 		session['Group']=None
 		session['Points']=0
+		session['Groups']=None
 		if(request.form['Password']==request.form['ConfirmPassword']):
 			registerSuccess = pg.register_user(request.form['Username'],request.form['Password'],\
 			request.form['Fullname'])
@@ -121,6 +120,10 @@ def createGroupLog():
 	pg.add_group(request.form['Groupname'],session['Username'])
 	session['Groups']=session['Groups']+[str(request.form['Groupname'])]
 	return redirect("/createGroup")
+@app.route('/logOut')
+def logOut():
+	session.clear()
+	return redirect("/")
 @app.route('/')
 def home():
 	if not request.args:
@@ -207,6 +210,10 @@ def profile():
 		failedConfirm=request.args["FailedConfirm"]
 	except:
 		failedConfirm=None
+	try:
+		failedUsername=request.args["FailedUsername"]
+	except:
+		failedUsername=None
 	if(failedConfirm):
 		return render_template('profile.html',\
 		username=session['Username'],\
@@ -215,6 +222,14 @@ def profile():
 		group=session['Group'],\
 		groups=session['Groups'],\
 		failedConfirm=failedConfirm)
+	if(failedUsername):
+		return render_template('profile.html',\
+		username=session['Username'],\
+		profilePage="active",\
+		points=session['Points'],\
+		group=session['Group'],\
+		groups=session['Groups'],\
+		FailedUsername=failedUsername)
 	return render_template('profile.html',\
 	username=session['Username'],\
 	profilePage="active",\

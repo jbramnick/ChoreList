@@ -2,6 +2,7 @@ import psycopg2
 import psycopg2.extras
 from config import *
 
+# Opens database connection for query execution
 def connectToDB():
     connectionString = 'dbname=%s user=%s password=%s host=%s' % (POSTGRES_DATABASE,POSTGRES_USER,POSTGRES_PASSWORD,POSTGRES_HOST)
     try:
@@ -10,6 +11,7 @@ def connectToDB():
         print("Can't connect to database")
         return None
         
+# Prototype for executing queries
 def execute_query(query, conn, select=True, args=None):
 	cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 	results = None
@@ -27,6 +29,7 @@ def execute_query(query, conn, select=True, args=None):
 	cur.close()      
 	return results
 
+# Given a group_id, returns the id, name, stock, and cost of all rewards for the given group_id
 def get_reward(group_id):
 	conn=connectToDB()
 	if conn == None:
@@ -37,16 +40,18 @@ def get_reward(group_id):
 	conn.close()
 	return results
 	
+# Given a username, returns the group id and name of all groups the user is a user or admin of
 def get_groups(username):
 	conn=connectToDB()
 	if conn == None:
 		return None
-	query_string = "SELECT g.id, g.name FROM groups g LEFT JOIN users u ON u.group_id = g.id left JOIN admin a ON a.group_id = g.id WHERE u.id = (SELECT id FROM usernames WHERE username = %s) OR a.id = (SELECT id FROM usernames WHERE username = %s);"
+	query_string = "SELECT g.id as id, g.name as name FROM groups g LEFT JOIN users u ON u.group_id = g.id left JOIN admin a ON a.group_id = g.id WHERE u.id = (SELECT id FROM usernames WHERE username = %s) OR a.id = (SELECT id FROM usernames WHERE username = %s);"
 	results = execute_query(query_string, conn, args=(username, username))
 	print(results)
 	conn.close()
 	return results
 	
+# Given a user, group_id, and points, updates that user in that group by adding points given to their current points total
 def add_points(username, group_id, points):
 	conn = connectToDB()
 	if conn == None:
@@ -62,6 +67,7 @@ def add_points(username, group_id, points):
 	conn.close()
 	return False
 	
+# Given username, password, and newusername, changes the user's username if they have the currect user+pass info
 def change_username(username, password, newusername):
 	conn = connectToDB()
 	if conn == None:
@@ -79,6 +85,7 @@ def change_username(username, password, newusername):
 		conn.close()
 		return False
 		
+# Given username, password, and newusername, changes the user's password if they have the currect user+pass info
 def change_password(username, password, newpassword):
 	conn = connectToDB()
 	if conn == None:
@@ -94,6 +101,7 @@ def change_password(username, password, newpassword):
 		conn.close()
 		return False
 	
+# given username, group_id, and points, sets the user's points for the specified group to the points given
 def edit_points(username, group_id, points):
 	conn = connectToDB()
 	if conn == None:
@@ -108,6 +116,7 @@ def edit_points(username, group_id, points):
 	conn.close()
 	return False
 
+# Given group_id, returns the id, name, and points of all chores in that group
 def get_all_chores(group_id):
 	conn=connectToDB()
 	if conn == None:
@@ -118,6 +127,7 @@ def get_all_chores(group_id):
 	conn.close()
 	return results
 
+# Given username, and password, returns true if the user and pass combination is valid, false otherwise
 def get_user(username, password):
 	conn=connectToDB()
 	if conn == None:
@@ -131,6 +141,7 @@ def get_user(username, password):
 	else:
 		return False
 	
+# given username, returns the user's points and group_name of all groups the user is a part of in a list of dictionaries
 def get_auth(username):
 	conn=connectToDB()
 	if conn == None:
@@ -141,6 +152,7 @@ def get_auth(username):
 	conn.close()
 	return results
 
+# given username, password, and name, checks if the user is already registers and returns false if they are, otherwise inserts the user into the usernames and pass tables
 def register_user(username, password, name):
 	conn=connectToDB()
 	if conn == None:
@@ -159,6 +171,7 @@ def register_user(username, password, name):
 	conn.close()
 	return False
 	
+# given group_name and username, checks if the group already exists for that user and returns false if it does, otherwise adds that group along with that user as an admin
 def add_group(group_name, username):
 	conn=connectToDB()
 	if conn == None:
@@ -177,6 +190,7 @@ def add_group(group_name, username):
 	conn.close()
 	return False
 	
+# given a group_name and username, checks if a user is already in the group and returns False if they are, otherwise inserts them into the group by adding them to the users table for that group
 def add_to_group(group_name, username):
 	conn=connectToDB()
 	if conn == None:
@@ -191,20 +205,3 @@ def add_to_group(group_name, username):
 		return True
 	conn.close()
 	return False
-		
-def new_player(username, password, name):
-	conn = connectToDB()
-	if conn == None:
-		return None
-	query_string = "SELECT id FROM usernames WHERE username = %s"
-	testresults = execute_query(query_string, conn, args=(username,))
-	if not testresults:
-	    query_string1 = "INSERT INTO usernames (username, name) VALUES (%s, %s)"
-	    execute_query(query_string1, conn, select=False,  args=(username,name))
-	
-	    query_string2 = "INSERT INTO pass (id, password) VALUES ((SELECT id FROM usernames WHERE username = %s), crypt(%s, gen_salt('bf')))"
-	    execute_query(query_string2, conn, select=False,  args=(username, password))
-	    conn.close()
-	    return 1
-	conn.close()
-	return 0

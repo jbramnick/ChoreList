@@ -2,20 +2,20 @@
 
 {% block content %}
 	{% if failed=="True" %}
-		<script>alert("Passwords do not match");</script>
+		<script>alert("Passwords do not match/username already exists");</script>
 	{% endif %}
 	<h1>Register</h1>
 	<div id='Register'>
 		<form id="loginForm" action='/registerLog' method='POST'>
 			<table><tr>
 			<td><span>Username:</span></td>
-			<td><input type="text" name="Username" ></input></td></tr>
+			<td><input type="text" name="Username" required></input></td></tr>
 			<tr><td><span>Password:</span></td>
-			<td><input type="password" name="Password" ></input></td></tr>
+			<td><input type="password" name="Password" required></input></td></tr>
 			<tr><td><span>Confirm Password:</span></td>
-			<td><input type="password" name="ConfirmPassword"/></td></tr>
+			<td><input type="password" name="ConfirmPassword" required/></td></tr>
 			<tr><td><span>Full Name:</span></td>
-			<td><input type=text" name="Fullname"/></td></tr>
+			<td><input type=text" name="Fullname" required/></td></tr>
 			</table>
 			<table>
 			<tr><td><input type="submit"  name="submit" value="Register"></td></tr>
