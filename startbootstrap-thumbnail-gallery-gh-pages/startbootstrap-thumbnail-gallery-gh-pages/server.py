@@ -8,7 +8,7 @@ import data_postgres as pg
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24).encode('hex')
-#call this method before every user page
+
 def auth():
 	try:
 		if not session:
@@ -40,6 +40,8 @@ def authorization():
 				session['Points']=None
 				session['Group']=None
 				session['Groups']=pg.get_groups(request.form['Username'])
+				print(session['Groups'])
+
 				return redirect("/"+page)
 		else:
 			return redirect("/?failed=True&page="+page)
@@ -67,21 +69,12 @@ def registerLog():
 		
 @app.route('/choreLog')
 def choreLog():
-	#DATABASE
-	#remove chore from database
-	#MB# Do you want to remove a specific chore? if so give me the variable I need to identify which chore
-	#im going to pass you a chore id to remove rather to set to awaiting verification or whatever it will likely be
-	#request.args['choreId']
+	
 	return redirect("/chores?choreLog=True")
 	
 @app.route('/rewardLog')
 def rewardLog():
-	#DATABASE
-	#MB# please provide name of the request.form[''] variable to identify the reward
-	#its going to be a request.args['rewardId'] not form since im passing it through a link not a form submit
-	#remove a rewards stock from database
-	#also change the session['Points'] value 
-	#Change it for the user
+	
 	return redirect("/rewards?rewardLog=True")
 	
 @app.route('/profileDelta',methods=['POST'])
@@ -167,14 +160,9 @@ def createGroup():
 def rewards():
 	if not auth():
 		return redirect("/?page=rewards&failed=False")
-	#DATABASE
-	#MB# Specify what database values for what you need here. Is it just a list of rewards? if so what values do you need?
-	#ANSWER-Need another list of lists here with the same group session variable(session['group']) 
-	#format of list
 	
-	#[reward id, reward name, reward stock, reward point value]
 	thing2 = pg.get_reward(session['Group'])
-	# Above lists all rewards for a group in the format [id, name, stock, value]
+	
 	thing=[[1,2,3],[4,5,6]]
 	try:
 		if not request.args["rewardLog"]:
@@ -198,12 +186,7 @@ def index():
 	if not auth():
 		return redirect("/?page=chores&failed=False")
 	thing=[[1,2,3],[4,5,6]]
-	#ANSWER-Need a list of lists the list being all chores for the group that the user is in
-	#i will pass you a group variable likely going to be session['Group']
-	#the format of the list should be this
-	#chores = pg.get_all_chores(session['Group'])
-	#MB# The above gets all chores whether claimed or not in the structure [id, name, points] 
-	#[chore id,chore name,chore point value]
+	
 	try:
 		if not request.args["choreLog"]:
 			choreLog=None
