@@ -205,3 +205,71 @@ def add_to_group(group_name, username):
 		return True
 	conn.close()
 	return False
+
+# given the following information, adds a chore to the db for the given group_id
+def add_chore(chore_name, description, point_val, claimed, group_id):
+	conn=connectToDB()
+	if conn == None:
+		return None
+		
+	query_string = "INSERT INTO chore (name, description, rewardVal, claimed, group_id) VALUES(%s, %s, %s, %s, %s)"
+	results2 = execute_query(query_string, conn, select=False, args=(chore_name, description, point_val, claimed, group_id))
+	conn.close()
+	return True
+	
+# given a chore_name and group_id, deletes chores cooresponding to that name in a certain group. Returns True if succeeded
+def remove_chore(chore_name, group_id):
+	conn=connectToDB()
+	if conn == None:
+		return None
+	query_string = "SELECT id FROM chore WHERE name = %s AND group_id = %s"
+	results = execute_query(query_string, conn, args=(chore_name, group_id))
+	if results:
+		query_string = "DELETE FROM chore WHERE name = %s AND group_id = %s"
+		results2 = execute_query(query_string, conn, select=False, args=(chore_name, group_id))
+		conn.close()
+		return True
+	conn.close()
+	return False
+	
+# given the following information, adds a reward to the specified group
+def add_reward(reward_name, description, cost, stock, group_id):
+	conn=connectToDB()
+	if conn == None:
+		return None
+		
+	query_string = "INSERT INTO reward (name, description, cost, stock, group_id) VALUES(%s, %s, %s, %s, %s)"
+	results2 = execute_query(query_string, conn, select=False, args=(reward_name, description, cost, stock, group_id))
+	conn.close()
+	return True
+	
+# given a reward information (number = stock to remove), updates the stock for a reward to subtract number from stock. If this puts stock at 0, then it deletes the reward from the table. returns true if succeeded
+def remove_reward(reward_name, group_id, number):
+	conn=connectToDB()
+	if conn == None:
+		return None
+	query_string = "SELECT id FROM reward WHERE name = %s AND group_id = %s AND stock >= %s"
+	results = execute_query(query_string, conn, args=(reward_name, group_id, number))
+	if results:
+		query_string = "UPDATE reward SET stock = (stock-%s) WHERE name = %s AND group_id = %s"
+		results2 = execute_query(query_string, conn, select=False, args=(number, reward_name, group_id))
+		query_string ="SELECT stock FROM reward WHERE name = %s AND group_id = %s"
+		results3 = execute_query(query_string, conn, args=(reward_name, group_id))
+		if results3[0]["stock"] == 0:
+			query_string = "DELETE FROM reward WHERE name = %s AND group_id = %s"
+			results2 = execute_query(query_string, conn, select=False, args=(reward_name, group_id))
+		conn.close()
+		return True
+	conn.close()
+	return False
+	
+# given a username, returns the id and name of all groups that user is an admin of
+def get_admin_groups(username):
+	conn=connectToDB()
+	if conn == None:
+		return None
+	query_string = "SELECT g.id as id, g.name as name FROM groups g JOIN admin a ON a.group_id = g.id WHERE a.id = (SELECT id FROM usernames WHERE username = %s);"
+	results = execute_query(query_string, conn, args=(username,))
+	print(results)
+	conn.close()
+	return results
