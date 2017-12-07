@@ -118,7 +118,7 @@ def createGroupLog():
 	if not auth:
 		return redirect("/?page=createGroup&failed=False")
 	pg.add_group(request.form['Groupname'],session['Username'])
-	session['Groups']=session['Groups']+[str(request.form['Groupname'])]
+	session['Groups']=session['Groups']+[[None,str(request.form['Groupname'])]]
 	return redirect("/createGroup")
 @app.route('/logOut')
 def logOut():
@@ -135,7 +135,6 @@ def register():
 		return render_template('register.html',login=True)
 	else:
 		return render_template('register.html',failed=request.args["failed"],login=True)
-
 @app.route('/about')
 def about():
 	if not auth():
@@ -150,6 +149,7 @@ def about():
 def createGroup():
 	if not auth():
 		return redirect("/?page=createGroup&failed=False")
+	print(session['Groups'])
 	return render_template('createGroup.html',\
 	username=session['Username'],\
 	createGroupPage="active",\
@@ -160,9 +160,7 @@ def createGroup():
 def rewards():
 	if not auth():
 		return redirect("/?page=rewards&failed=False")
-	
 	thing2 = pg.get_reward(session['Group'])
-	
 	thing=[[1,2,3],[4,5,6]]
 	try:
 		if not request.args["rewardLog"]:
@@ -236,5 +234,11 @@ def profile():
 	points=session['Points'],\
 	groups=session['Groups'],\
 	group=session['Group'])
+@app.route('/manageGroups')
+def manageGroups():
+	pass
+@app.route('/test')
+def test():
+	pass
 if __name__ == '__main__':
     app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)), debug = True)
