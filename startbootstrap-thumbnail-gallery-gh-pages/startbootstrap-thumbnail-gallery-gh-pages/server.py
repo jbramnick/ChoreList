@@ -145,6 +145,17 @@ def about():
 	points=session['Points'],\
 	groups=session['Groups'],\
 	group=session['Group'])
+@app.route('/help')
+def help():
+	if not auth():
+		return redirect("/?page=help&failed=False")
+	return render_template('Help.html',\
+	username=session['Username'],\
+	helpPage="active",\
+	points=session['Points'],\
+	groups=session['Groups'],\
+	group=session['Group'])
+
 @app.route('/createGroup')
 def createGroup():
 	if not auth():
